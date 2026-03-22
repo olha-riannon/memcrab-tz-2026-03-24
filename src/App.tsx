@@ -7,9 +7,8 @@ import Input from "./components/Input";
 function App() {
   const [rows, setRows] = useState(0); // M
   const [cols, setCols] = useState(0); // N
-  const [numClosest, setNumClosest] = useState(1); // X
+  const [numClosest, setNumClosest] = useState(0); // X
   const [matrix, setMatrix] = useState<Cell[][]>([]);
-  const [hoveredCellId, setHoveredCellId] = useState<number | null>(null);
 
   const handleGenerate = () => {
     setMatrix(generateMatrix(rows, cols));
@@ -31,8 +30,6 @@ function App() {
         matrix={matrix}
         setMatrix={setMatrix}
         numClosest={numClosest}
-        hoveredCellId={hoveredCellId}
-        setHoveredCellId={setHoveredCellId}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import React, { useState, type FC } from "react";
 import type { Cell } from "../types/types";
 import "../css/MatrixTable.css";
 
@@ -6,17 +6,21 @@ interface MatrixTableProps {
   matrix: Cell[][];
   setMatrix: React.Dispatch<React.SetStateAction<Cell[][]>>;
   numClosest: number;
-  hoveredCellId: number | null;
-  setHoveredCellId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const MatrixTable: FC<MatrixTableProps> = ({ matrix, setMatrix }) => {
+const MatrixTable: FC<MatrixTableProps> = ({
+  matrix,
+  setMatrix,
+  numClosest,
+}) => {
+  const [nearestCell, setNearestCell] = useState<number[]>([]);
+  const [rowToPercent, setRowToPercent] = useState<number | null>(null);
+
   const getRowSum = (row: Cell[]) =>
     row.reduce((acc, cell) => acc + cell.value, 0);
 
   const getPercentile = (values: number[], percentile: number): number => {
     if (!values.length) return 0;
-
     const sorted = [...values].sort((a, b) => a - b);
     const rank = percentile * (sorted.length - 1);
     const lower = Math.floor(rank);
@@ -48,6 +52,21 @@ const MatrixTable: FC<MatrixTableProps> = ({ matrix, setMatrix }) => {
     );
   };
 
+  const findNearestCells = (
+    matrix: Cell[][],
+    targetValue: number,
+    numClosest: number,
+  ) => {
+    const allCells = matrix.flat();
+    const sortedByDistance = allCells
+      .filter((cell) => cell.value !== targetValue)
+      .sort(
+        (a, b) =>
+          Math.abs(a.value - targetValue) - Math.abs(b.value - targetValue),
+      );
+    return sortedByDistance.slice(0, numClosest).map((cell) => cell.id);
+  };
+
   return (
     <div className="matrix-table-container">
       <table>
@@ -62,23 +81,59 @@ const MatrixTable: FC<MatrixTableProps> = ({ matrix, setMatrix }) => {
         </thead>
 
         <tbody>
-          {matrix.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              <td style={{ fontWeight: "bold" }}>Row {rowIndex + 1}</td>
+          {matrix.map((row, rowIndex) => {
+            const rowSum = getRowSum(row);
+            const maxValue = Math.max(...row.map((c) => c.value));
 
-              {row.map((cell, colIndex) => (
+            return (
+              <tr key={rowIndex}>
+                <td style={{ fontWeight: "bold" }}>Row {rowIndex + 1}</td>
+
+                {row.map((cell, colIndex) => {
+                  const isHighlighted = nearestCell.includes(cell.id);
+
+                  const displayValue =
+                    rowToPercent === rowIndex
+                      ? `${Math.round((cell.value / rowSum) * 100)}%`
+                      : cell.value;
+
+                  const backgroundColor =
+                    rowToPercent === rowIndex
+                      ? `rgba(0, 0, 255, ${cell.value / maxValue})`
+                      : isHighlighted
+                        ? "gray"
+                        : "transparent";
+
+                  return (
+                    <td
+                      key={cell.id}
+                      onClick={() => handleIncreaseClick(rowIndex, colIndex)}
+                      onMouseEnter={() =>
+                        setNearestCell(
+                          findNearestCells(matrix, cell.value, numClosest),
+                        )
+                      }
+                      onMouseLeave={() => setNearestCell([])}
+                      style={{
+                        cursor: "pointer",
+                        backgroundColor,
+                      }}
+                    >
+                      {displayValue}
+                    </td>
+                  );
+                })}
+
                 <td
-                  key={cell.id}
-                  onClick={() => handleIncreaseClick(rowIndex, colIndex)}
-                  style={{ cursor: "pointer" }}
+                  style={{ fontWeight: "bold", cursor: "pointer" }}
+                  onMouseEnter={() => setRowToPercent(rowIndex)}
+                  onMouseLeave={() => setRowToPercent(null)}
                 >
-                  {cell.value}
+                  {rowSum}
                 </td>
-              ))}
-
-              <td style={{ fontWeight: "bold" }}>{getRowSum(row)}</td>
-            </tr>
-          ))}
+              </tr>
+            );
+          })}
 
           {columnPercentiles && (
             <tr style={{ fontStyle: "italic" }}>
