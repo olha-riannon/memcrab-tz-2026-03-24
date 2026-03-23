@@ -10,12 +10,10 @@ function App() {
   const [cols, setCols] = useState(0); // N
   const [numClosest, setNumClosest] = useState(0); // X
   const [matrix, setMatrix] = useState<Cell[][]>([]);
-  const [isMatrixGenerated, setIsMatrixGenerated] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = () => {
     if (rows === 0 || cols === 0) {
-      setIsMatrixGenerated(false);
       setError(
         rows === 0 && cols === 0
           ? "Введіть кількість для рядків та колонок."
@@ -28,7 +26,6 @@ function App() {
     }
 
     setMatrix(generateMatrix(rows, cols));
-    setIsMatrixGenerated(true);
     setError(null);
   };
 
@@ -59,18 +56,19 @@ function App() {
               min={0}
             />
           </div>
-          <button className="button" onClick={handleGenerate}>
+          <button className="generate-button" onClick={handleGenerate}>
             Згенерувати матрицю
           </button>
         </div>
       </div>
 
-      {isMatrixGenerated && (
+      {matrix.length > 0 && (
         <div>
           <p>Клікніть на клітинку, щоби збільшити її значення на 1.</p>
           <MatrixTable
             matrix={matrix}
             setMatrix={setMatrix}
+            setRows={setRows}
             numClosest={numClosest}
           />
         </div>

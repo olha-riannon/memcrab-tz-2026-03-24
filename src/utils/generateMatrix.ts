@@ -1,10 +1,14 @@
 import type { Cell } from "../types/types";
 
+let globalId = 1;
+
+export const generateRow = (cols: number): Cell[] => {
+  return Array.from({ length: cols }, () => ({
+    id: globalId++,
+    value: Math.floor(Math.random() * 900) + 100,
+  }));
+};
+
 export const generateMatrix = (rows: number, cols: number): Cell[][] => {
-  return Array.from({ length: rows }).map((_, rowIndex) =>
-    Array.from({ length: cols }).map((_, colIndex) => ({
-      id: rowIndex * cols + colIndex + 1,
-      value: Math.floor(Math.random() * 900) + 100,
-    })),
-  );
+  return Array.from({ length: rows }, () => generateRow(cols));
 };

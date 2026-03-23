@@ -13,7 +13,8 @@ th {
 
 .matrix-table-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   margin: 20px 0;
 }
 

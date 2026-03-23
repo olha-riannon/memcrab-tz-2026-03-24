@@ -1,16 +1,19 @@
 import React, { useState, type FC } from "react";
 import type { Cell } from "../../types/types";
 import "./MatrixTable.css";
+import { generateRow } from "../../utils/generateMatrix";
 
 interface MatrixTableProps {
   matrix: Cell[][];
   setMatrix: React.Dispatch<React.SetStateAction<Cell[][]>>;
+  setRows: React.Dispatch<React.SetStateAction<number>>;
   numClosest: number;
 }
 
 const MatrixTable: FC<MatrixTableProps> = ({
   matrix,
   setMatrix,
+  setRows,
   numClosest,
 }) => {
   const [nearestCell, setNearestCell] = useState<number[]>([]);
@@ -65,6 +68,26 @@ const MatrixTable: FC<MatrixTableProps> = ({
           Math.abs(a.value - targetValue) - Math.abs(b.value - targetValue),
       );
     return sortedByDistance.slice(0, numClosest).map((cell) => cell.id);
+  };
+
+  const handleRemoveRow = (rowIndex: number) => {
+    setMatrix((prev) => {
+      const newMatrix = prev.filter((_, rId) => rId !== rowIndex);
+      setRows(newMatrix.length);
+
+      return newMatrix;
+    });
+  };
+
+  const handleAddRow = () => {
+    setMatrix((prev) => {
+      if (!prev.length) return prev;
+      const newRow = generateRow(prev[0].length);
+      const updatedMatrix = [...prev, newRow];
+      setRows(updatedMatrix.length);
+
+      return updatedMatrix;
+    });
   };
 
   return (
@@ -132,6 +155,10 @@ const MatrixTable: FC<MatrixTableProps> = ({
                 >
                   {rowSum}
                 </td>
+
+                <td style={{ width: "30px", border: "none" }}>
+                  <button onClick={() => handleRemoveRow(rowIndex)}>❌</button>
+                </td>
               </tr>
             );
           })}
@@ -149,6 +176,10 @@ const MatrixTable: FC<MatrixTableProps> = ({
           )}
         </tbody>
       </table>
+
+      <button className="add-row-button" onClick={handleAddRow}>
+        Додати рядок
+      </button>
     </div>
   );
 };

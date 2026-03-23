@@ -66,13 +66,23 @@ h1 {
   flex-direction: column;
   justify-content: center;
   justify-self: center;
-  /* width: 60%; */
 }
 
-.button {
+.generate-button {
   width: 100%;
-  height: 40px;
   font-size: 20px;
+  padding: 10px 0;
+}
+
+.add-row-button {
+  width: 200px;
+  font-size: 15px;
+  padding: 7px 0;
+  margin-top: 20px;
+}
+
+.generate-button,
+.add-row-button {
   color: #d0c4c4;
   background: #21afb080;
   border: solid 0;
@@ -80,12 +90,13 @@ h1 {
   cursor: pointer;
 }
 
-.button:hover {
+.generate-button:hover,
+.add-row-button:hover {
   background: #69dede80;
   transition: 0.5s ease;
 }
 
-.button:active {
+.generate-button:active {
   background: #0b575780;
   transition: 0.5s ease;
 }

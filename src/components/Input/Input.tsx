@@ -1,4 +1,4 @@
-import { useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import "./Input.css";
 
 interface InputProps {
@@ -37,6 +37,10 @@ const Input: FC<InputProps> = ({ name, value, setValue, min, max }) => {
       setValue(min);
     }
   };
+
+  useEffect(() => {
+    setInputValue(value.toString());
+  }, [value]);
 
   return (
     <label className="input-label">
