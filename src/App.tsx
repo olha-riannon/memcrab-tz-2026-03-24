@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { generateMatrix } from "./utils/generateMatrix";
 import type { Cell } from "./types/types";
-import Input from "./components/Input";
 import MatrixTable from "./components/MatrixTable/MatrixTable";
+import Input from "./components/Input/Input";
+import "./components/Input/Input.css";
 
 function App() {
   const [rows, setRows] = useState(0); // M
@@ -16,13 +17,32 @@ function App() {
 
   return (
     <div>
-      <div>
+      <div className="container">
         <h1>Matrix App</h1>
         <div>
-          <Input name="M" value={rows} setValue={setRows} min={0} max={100} />
-          <Input name="N" value={cols} setValue={setCols} min={0} max={100} />
-          <Input name="X" value={numClosest} setValue={setNumClosest} min={0} />
-          <button onClick={handleGenerate}>Generate</button>
+          <div className="input-container">
+            <Input
+              name="Число рядків"
+              value={rows}
+              setValue={setRows}
+              min={0}
+              max={100}
+            />
+            <Input
+              name="Число стовпців"
+              value={cols}
+              setValue={setCols}
+              min={0}
+              max={100}
+            />
+            <Input
+              name="Кількість найближчих значень"
+              value={numClosest}
+              setValue={setNumClosest}
+              min={0}
+            />
+          </div>
+          <button onClick={handleGenerate}>Згенерувати</button>
         </div>
       </div>
 

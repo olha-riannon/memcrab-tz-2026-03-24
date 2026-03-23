@@ -1,4 +1,5 @@
 import { useState, type FC } from "react";
+import "./Input.css";
 
 interface InputProps {
   name: string;
@@ -38,11 +39,10 @@ const Input: FC<InputProps> = ({ name, value, setValue, min, max }) => {
   };
 
   return (
-    <label>
-      <span>{name}:</span>
+    <label className="input-label">
+      <span style={{ fontSize: "14px" }}>{name}</span>
       <input
         type="number"
-        style={{ minWidth: "150px", marginLeft: "10px" }}
         value={inputValue}
         onChange={handleChange}
         onBlur={handleBlur}
