@@ -101,7 +101,7 @@ const MatrixTable: FC<MatrixTableProps> = ({
                     rowToPercent === rowIndex
                       ? `rgba(0, 120, 150, ${cell.value / maxValue})`
                       : isHighlighted
-                        ? "purple"
+                        ? "#f87bf354"
                         : "transparent";
 
                   return (
@@ -115,8 +115,9 @@ const MatrixTable: FC<MatrixTableProps> = ({
                       }
                       onMouseLeave={() => setNearestCell([])}
                       style={{
-                        cursor: "pointer",
                         backgroundColor,
+                        transition: "1s ease",
+                        cursor: "pointer",
                       }}
                     >
                       {displayValue}
