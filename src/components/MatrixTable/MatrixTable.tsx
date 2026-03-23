@@ -1,6 +1,6 @@
 import React, { useState, type FC } from "react";
-import type { Cell } from "../types/types";
-import "../css/MatrixTable.css";
+import type { Cell } from "../../types/types";
+import "./MatrixTable.css";
 
 interface MatrixTableProps {
   matrix: Cell[][];
@@ -71,7 +71,7 @@ const MatrixTable: FC<MatrixTableProps> = ({
     <div className="matrix-table-container">
       <table>
         <thead>
-          <tr>
+          <tr className="matrix-title">
             <th></th>
             {matrix[0]?.map((_, colIndex) => (
               <th key={colIndex}>Col {colIndex + 1}</th>
@@ -87,7 +87,7 @@ const MatrixTable: FC<MatrixTableProps> = ({
 
             return (
               <tr key={rowIndex}>
-                <td style={{ fontWeight: "bold" }}>Row {rowIndex + 1}</td>
+                <td className="matrix-title">Row {rowIndex + 1}</td>
 
                 {row.map((cell, colIndex) => {
                   const isHighlighted = nearestCell.includes(cell.id);
@@ -99,9 +99,9 @@ const MatrixTable: FC<MatrixTableProps> = ({
 
                   const backgroundColor =
                     rowToPercent === rowIndex
-                      ? `rgba(0, 0, 255, ${cell.value / maxValue})`
+                      ? `rgba(0, 120, 150, ${cell.value / maxValue})`
                       : isHighlighted
-                        ? "gray"
+                        ? "purple"
                         : "transparent";
 
                   return (
@@ -137,7 +137,7 @@ const MatrixTable: FC<MatrixTableProps> = ({
 
           {columnPercentiles && (
             <tr style={{ fontStyle: "italic" }}>
-              <td style={{ fontWeight: "bold" }}>60th percentile</td>
+              <td className="matrix-title">60th percentile</td>
 
               {columnPercentiles.map((val, id) => (
                 <td key={id}>{val}</td>
