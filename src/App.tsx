@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { generateMatrix } from "./utils/generateMatrix";
+import { generateMatrix } from "./utils/matrixUtils";
 import type { Cell } from "./types/types";
 import MatrixTable from "./components/MatrixTable/MatrixTable";
 import Input from "./components/Input/Input";
@@ -24,7 +24,6 @@ function App() {
       setMatrix([]);
       return;
     }
-
     setMatrix(generateMatrix(rows, cols));
     setError(null);
   };

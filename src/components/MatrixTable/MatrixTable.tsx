@@ -1,7 +1,7 @@
 import React, { useState, type FC } from "react";
 import type { Cell } from "../../types/types";
 import "./MatrixTable.css";
-import { generateRow } from "../../utils/generateMatrix";
+import { generateRow, getPercentile, getRowSum } from "../../utils/matrixUtils";
 
 interface MatrixTableProps {
   matrix: Cell[][];
@@ -19,41 +19,12 @@ const MatrixTable: FC<MatrixTableProps> = ({
   const [nearestCell, setNearestCell] = useState<number[]>([]);
   const [rowToPercent, setRowToPercent] = useState<number | null>(null);
 
-  const getRowSum = (row: Cell[]) =>
-    row.reduce((acc, cell) => acc + cell.value, 0);
-
-  const getPercentile = (values: number[], percentile: number): number => {
-    if (!values.length) return 0;
-    const sorted = [...values].sort((a, b) => a - b);
-    const rank = percentile * (sorted.length - 1);
-    const lower = Math.floor(rank);
-    const upper = Math.ceil(rank);
-
-    return (
-      Math.round(
-        (sorted[lower] + (sorted[upper] - sorted[lower]) * (rank - lower)) * 10,
-      ) / 10
-    );
-  };
-
   const columnPercentiles = matrix[0]?.map((_, colIndex) =>
     getPercentile(
       matrix.map((row) => row[colIndex].value),
       0.6,
     ),
   );
-
-  const handleIncreaseClick = (rowIndex: number, colIndex: number) => {
-    setMatrix((prev) =>
-      prev.map((row, rId) =>
-        rId === rowIndex
-          ? row.map((cell, cId) =>
-              cId === colIndex ? { ...cell, value: cell.value + 1 } : cell,
-            )
-          : row,
-      ),
-    );
-  };
 
   const findNearestCells = (
     matrix: Cell[][],
@@ -68,6 +39,18 @@ const MatrixTable: FC<MatrixTableProps> = ({
           Math.abs(a.value - targetValue) - Math.abs(b.value - targetValue),
       );
     return sortedByDistance.slice(0, numClosest).map((cell) => cell.id);
+  };
+
+  const handleIncreaseClick = (rowIndex: number, colIndex: number) => {
+    setMatrix((prev) =>
+      prev.map((row, rId) =>
+        rId === rowIndex
+          ? row.map((cell, cId) =>
+              cId === colIndex ? { ...cell, value: cell.value + 1 } : cell,
+            )
+          : row,
+      ),
+    );
   };
 
   const handleRemoveRow = (rowIndex: number) => {

@@ -14,16 +14,13 @@ const Input: FC<InputProps> = ({ name, value, setValue, min, max }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value;
-
     if (raw === "") {
       setInputValue("");
       return;
     }
 
     const cleaned = raw.replace(/^0+(?=\d)/, "");
-
     let num = Number(cleaned);
-
     if (min !== undefined) num = Math.max(num, min);
     if (max !== undefined) num = Math.min(num, max);
 
