@@ -10,9 +10,26 @@ function App() {
   const [cols, setCols] = useState(0); // N
   const [numClosest, setNumClosest] = useState(0); // X
   const [matrix, setMatrix] = useState<Cell[][]>([]);
+  const [isMatrixGenerated, setIsMatrixGenerated] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = () => {
+    if (rows === 0 || cols === 0) {
+      setIsMatrixGenerated(false);
+      setError(
+        rows === 0 && cols === 0
+          ? "Введіть кількість для рядків та колонок."
+          : rows === 0
+            ? "Кількість рядків не може бути 0."
+            : "Кількість колонок не може бути 0.",
+      );
+      setMatrix([]);
+      return;
+    }
+
     setMatrix(generateMatrix(rows, cols));
+    setIsMatrixGenerated(true);
+    setError(null);
   };
 
   return (
@@ -48,11 +65,18 @@ function App() {
         </div>
       </div>
 
-      <MatrixTable
-        matrix={matrix}
-        setMatrix={setMatrix}
-        numClosest={numClosest}
-      />
+      {isMatrixGenerated && (
+        <div>
+          <p>Клікніть на клітинку, щоби збільшити її значення на 1.</p>
+          <MatrixTable
+            matrix={matrix}
+            setMatrix={setMatrix}
+            numClosest={numClosest}
+          />
+        </div>
+      )}
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
