@@ -17,9 +17,9 @@ function App() {
 
   return (
     <div>
-      <div className="container">
+      <div>
         <h1>Matrix App</h1>
-        <div>
+        <div className="container">
           <div className="input-container">
             <Input
               name="Число рядків"
@@ -36,13 +36,15 @@ function App() {
               max={100}
             />
             <Input
-              name="Кількість найближчих значень"
+              name="Число найближчих значень"
               value={numClosest}
               setValue={setNumClosest}
               min={0}
             />
           </div>
-          <button onClick={handleGenerate}>Згенерувати</button>
+          <button className="button" onClick={handleGenerate}>
+            Згенерувати матрицю
+          </button>
         </div>
       </div>
 
