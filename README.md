@@ -1,73 +1,128 @@
-# React + TypeScript + Vite
+# Matrix App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive matrix application built with React and TypeScript.
+The app allows users to generate a matrix, manipulate its data, and visualize relationships between values through dynamic interactions.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+### Matrix Generation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Generate a matrix with a custom number of rows (M) and columns (N)
+- Each cell is filled with a random value
+- Input validation is applied (range: 0–100)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Cell Interactions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Clicking on a cell increases its value by 1
+- All dependent calculations update automatically
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Row Sum
+
+- Each row includes a "Sum" column
+- Values are recalculated dynamically after any change
+
+---
+
+### Column Percentile
+
+- An additional row displays the 60th percentile for each column
+- Uses interpolation (similar to spreadsheet behavior)
+- Values are rounded to one decimal place
+
+---
+
+### Nearest Values Highlight
+
+- Hovering over a cell highlights X closest values in the matrix
+- X is configurable by the user
+- Distance is calculated using absolute difference
+
+---
+
+### Row Percentage Mode and Heatmap
+
+- Hovering over a row's "Sum" cell:
+  - Replaces cell values with percentages of the row total
+  - Displays a heatmap based on each value relative to the maximum in the row
+
+- The heatmap uses a blue-green gradient for visual clarity
+
+---
+
+### Row Management
+
+- Ability to add new rows dynamically
+- Ability to remove any row
+- Table updates automatically after changes
+
+---
+
+### Validation and Error Handling
+
+- Prevents generating a matrix with zero rows or columns
+- Displays clear error messages
+- Inputs support flexible editing
+
+---
+
+## Tech Stack
+
+- React
+- TypeScript
+- Vite
+- CSS
+
+---
+
+## Installation
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Architecture Notes
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- The matrix is the single source of truth
+- All derived values (sum, percentiles) are calculated dynamically
+- Logic is separated into reusable utility functions:
+  - generateRow
+  - generateMatrix
+
+- Inputs are controlled components with internal state synchronization
+
+---
+
+## Key Implementation Details
+
+- Percentile is calculated using interpolation:
+
+  ```
+  rank = percentile * (n - 1)
+  ```
+
+- State updates are immutable
+- Each cell has a unique identifier for stable rendering
+
+---
+
+## Possible Improvements
+
+- Persist data using localStorage
+- Add animations for better UX
+- Support column addition/removal
+- Improve accessibility (keyboard navigation)
+
+---
+
+## Author
+
+Built as part of a technical assignment.
