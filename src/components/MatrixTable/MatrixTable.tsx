@@ -140,7 +140,7 @@ const MatrixTable: FC<MatrixTableProps> = ({
                 </td>
 
                 <td style={{ width: "30px", border: "none" }}>
-                  <button onClick={() => handleRemoveRow(rowIndex)}>❌</button>
+                  <button onClick={() => handleRemoveRow(rowIndex)}>🦀</button>
                 </td>
               </tr>
             );
